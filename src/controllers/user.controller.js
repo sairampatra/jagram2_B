@@ -54,11 +54,21 @@ export const login = async (req, res) => {
     const { userData, token } = await signinService({ email, password });
               console.log(userData)
 
-    return res
-      .cookie("token", token, {
+    return res.cookie("token", token, {
+        // httpOnly: true,
+        // sameSite: "strict",
+        // maxAge: 1 * 24 * 60 * 60 * 1000,
+
         httpOnly: true,
-        sameSite: "strict",
-        maxAge: 1 * 24 * 60 * 60 * 1000,
+        secure: true,             // true = HTTPS only
+        sameSite: "None",         // Required for cross-origin
+        maxAge: 1 * 24 * 60 * 60 * 1000, // 1 days
+
+  //        httpOnly: true,
+  // secure: process.env.NODE_ENV === "production", // false in dev
+  // sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+  // maxAge: 1 * 24 * 60 * 60 * 1000,
+
       })
       .json({
         success: true,
